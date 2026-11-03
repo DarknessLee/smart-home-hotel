@@ -1,0 +1,26 @@
+{
+  "name": "@smart-home/stores",
+  "version": "0.1.0",
+  "private": true,
+  "description": "智慧住家 - Pinia 全局状态模块（Mock 数据也走 Actions，方便后期切换真实接口）",
+  "type": "module",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "default": "./src/index.js"
+    }
+  },
+  "files": [
+    "src"
+  ],
+  "sideEffects": false,
+  "dependencies": {
+    "@smart-home/api": "workspace:*",
+    "@smart-home/utils": "workspace:*"
+  },
+  "peerDependencies": {
+    "pinia": "^2.1.0 || ^3.0.0 || ^4.0.0"
+  }
+}

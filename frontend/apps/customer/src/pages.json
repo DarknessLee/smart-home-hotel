@@ -1,0 +1,134 @@
+{
+  "pages": [
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTextStyle": "white",
+        "backgroundColor": "#0b1e4d"
+      }
+    },
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTextStyle": "white",
+        "backgroundColor": "#f5f7fa",
+        "enablePullDownRefresh": true,
+        "backgroundTextStyle": "dark"
+      }
+    },
+    {
+      "path": "pages/rooms/rooms",
+      "style": {
+        "navigationBarTitleText": "客房预订",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "backgroundColor": "#f5f7fa",
+        "enablePullDownRefresh": true,
+        "backgroundTextStyle": "dark"
+      }
+    },
+    {
+      "path": "pages/rooms/detail",
+      "style": {
+        "navigationBarTitleText": "房型详情",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "backgroundColor": "#f5f7fa"
+      }
+    },
+    {
+      "path": "pages/order/create",
+      "style": {
+        "navigationBarTitleText": "确认订单",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "backgroundColor": "#f5f7fa"
+      }
+    },
+    {
+      "path": "pages/order/list",
+      "style": {
+        "navigationBarTitleText": "我的订单",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "backgroundColor": "#f5f7fa",
+        "enablePullDownRefresh": true,
+        "backgroundTextStyle": "dark"
+      }
+    },
+    {
+      "path": "pages/order/detail",
+      "style": {
+        "navigationBarTitleText": "订单详情",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "backgroundColor": "#f5f7fa"
+      }
+    },
+    {
+      "path": "pages/checkin/checkin",
+      "style": {
+        "navigationBarTitleText": "实名与入住",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "backgroundColor": "#f5f7fa"
+      }
+    },
+    {
+      "path": "pages/device/device",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTextStyle": "white",
+        "backgroundColor": "#0b1220",
+        "enablePullDownRefresh": true,
+        "backgroundTextStyle": "light"
+      }
+    },
+    {
+      "path": "pages/profile/profile",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTextStyle": "white",
+        "backgroundColor": "#f5f7fa"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "智慧住家",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f5f7fa",
+    "backgroundColorTop": "#f5f7fa",
+    "backgroundColorBottom": "#f5f7fa"
+  },
+  "tabBar": {
+    "color": "#8c8c8c",
+    "selectedColor": "#1677ff",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "fontSize": "11px",
+    "iconWidth": "24px",
+    "spacing": "4px",
+    "height": "52px",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/rooms/rooms",
+        "text": "客房"
+      },
+      {
+        "pagePath": "pages/device/device",
+        "text": "设备"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@smart-home/admin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "智慧住家 - B 端管理后台（Vue3 + Element Plus + ECharts + 纯 JavaScript）",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "2.3.2",
+    "@smart-home/api": "workspace:*",
+    "@smart-home/stores": "workspace:*",
+    "@smart-home/utils": "workspace:*",
+    "echarts": "6.1.0",
+    "element-plus": "2.14.7",
+    "pinia": "3.0.4",
+    "vue": "3.5.44",
+    "vue-router": "4.6.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "6.0.10",
+    "vite": "8.3.4"
+  }
+}

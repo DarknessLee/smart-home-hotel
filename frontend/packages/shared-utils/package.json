@@ -1,0 +1,22 @@
+{
+  "name": "@smart-home/utils",
+  "version": "0.1.0",
+  "private": true,
+  "description": "智慧住家 - 通用工具库（纯 JavaScript）",
+  "type": "module",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./constants": "./src/constants.js",
+    "./status-machine": "./src/status-machine.js",
+    "./permission": "./src/permission.js",
+    "./format": "./src/format.js",
+    "./storage": "./src/storage.js",
+    "./validators": "./src/validators.js"
+  },
+  "files": [
+    "src"
+  ],
+  "sideEffects": false
+}

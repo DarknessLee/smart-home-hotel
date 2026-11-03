@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f1b33" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content="智慧住家 · 酒店管理后台（经营看板 / 房态工作台 / 订单 / 设备 / 告警 / 能耗 / 升级方案 / 财务）" />
+    <title>智慧住家 · 管理后台</title>
+  </head>
+  <body>
+    <div id="app">
+      <div class="app-boot">
+        <div class="app-boot__logo">智</div>
+        <p>智慧住家 · 管理后台加载中…</p>
+      </div>
+    </div>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: #f4f7fb;
+        font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+      }
+      .app-boot {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        color: #5c6b82;
+        font-size: 14px;
+        letter-spacing: 1px;
+      }
+      .app-boot__logo {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #1677ff, #4f9bff);
+        color: #fff;
+        font-size: 26px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 12px 28px rgba(22, 119, 255, 0.35);
+      }
+    </style>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

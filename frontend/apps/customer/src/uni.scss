@@ -1,0 +1,47 @@
+/**
+ * uni-app 全局 SCSS 变量（uni.scss 会被注入到所有 scss 样式块中）。
+ *
+ * 注意：本项目页面统一使用原生 CSS，不依赖 sass 预处理器；
+ * 这里仅保留 uni-app 官方约定的主题变量，便于后续扩展自定义主题。
+ */
+
+/* 主色（与 docs/architecture.md 6.3 约定一致） */
+$uni-color-primary: #1677ff;
+$uni-color-success: #52c41a;
+$uni-color-warning: #faad14;
+$uni-color-error: #f5222d;
+
+/* 文本 */
+$uni-text-color: #1f1f1f;
+$uni-text-color-inverse: #ffffff;
+$uni-text-color-grey: #8c8c8c;
+$uni-text-color-placeholder: #bfbfbf;
+$uni-text-color-disable: #c0c0c0;
+
+/* 背景 */
+$uni-bg-color: #ffffff;
+$uni-bg-color-grey: #f5f7fa;
+$uni-bg-color-hover: #f1f1f1;
+$uni-bg-color-mask: rgba(0, 0, 0, 0.4);
+
+/* 边框 */
+$uni-border-color: #ebedf0;
+
+/* 圆角 */
+$uni-border-radius-sm: 8rpx;
+$uni-border-radius-base: 16rpx;
+$uni-border-radius-lg: 24rpx;
+$uni-border-radius-circle: 50%;
+
+/* 间距 */
+$uni-spacing-row-sm: 10rpx;
+$uni-spacing-row-base: 20rpx;
+$uni-spacing-row-lg: 30rpx;
+$uni-spacing-col-sm: 8rpx;
+$uni-spacing-col-base: 16rpx;
+$uni-spacing-col-lg: 24rpx;
+
+/* 字号 */
+$uni-font-size-sm: 24rpx;
+$uni-font-size-base: 28rpx;
+$uni-font-size-lg: 32rpx;

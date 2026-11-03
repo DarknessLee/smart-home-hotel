@@ -1,0 +1,811 @@
+openapi: 3.0.3
+info:
+  title: 智慧住家（Smart Home Hotel）Go 后端接口摘要
+  version: 0.1.0
+  description: |
+    本文件是 `docs/api-contract.md` 的机器可读摘要，便于导入 Apifox / Postman 联调。
+    权威契约以 `docs/api-contract.md` 为准；所有业务响应统一为 `{ code, message, data }`，
+    `code === 0` 表示成功，业务失败时 HTTP 状态仍为 200（参数 JSON 解析失败为 400）。
+servers:
+  - url: http://127.0.0.1:8080/api
+    description: 本地开发环境（默认端口 8080）
+tags:
+  - name: auth
+    description: 认证 / 实名
+  - name: room
+    description: 门店 / 房型 / 房态
+  - name: order
+    description: 订单状态机
+  - name: device
+    description: 设备控制 / 运维
+  - name: scene
+    description: 场景一键执行
+  - name: dashboard
+    description: 经营看板 / 能耗
+  - name: alarm
+    description: 告警中心
+  - name: plan
+    description: 升级方案生成 / 审批
+  - name: finance
+    description: 发票 / 对账
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: mock-token-<userId>
+  schemas:
+    Envelope:
+      type: object
+      required: [code, message, data]
+      properties:
+        code:
+          type: integer
+          example: 0
+          description: 0 成功；非 0 为契约业务错误码
+        message:
+          type: string
+          example: ok
+        data:
+          nullable: true
+          description: 业务数据（结构见各接口说明）
+    Paginated:
+      type: object
+      properties:
+        list:
+          type: array
+          items: {}
+        total:
+          type: integer
+        page:
+          type: integer
+        page_size:
+          type: integer
+    LoginPayload:
+      type: object
+      properties:
+        token:
+          type: string
+          example: mock-token-U1000
+        user:
+          $ref: '#/components/schemas/User'
+    User:
+      type: object
+      properties:
+        id: { type: string, example: U1000 }
+        phone: { type: string, example: '13800138000' }
+        real_name: { type: string }
+        id_card: { type: string }
+        status: { type: string, enum: [normal, unverified, disabled] }
+        role: { type: string, enum: [customer, store_manager, frontdesk, finance, engineer] }
+        current_room_id: { type: string, example: R305 }
+        created_at: { type: string }
+    Store:
+      type: object
+      properties:
+        id: { type: string, example: ST001 }
+        name: { type: string }
+        address: { type: string }
+        phone: { type: string }
+        room_count: { type: integer, example: 50 }
+    RoomType:
+      type: object
+      properties:
+        id: { type: string, example: RT01 }
+        store_id: { type: string }
+        name: { type: string }
+        price: { type: number, example: 399 }
+        area: { type: integer }
+        bed_type: { type: string }
+        capacity: { type: integer }
+        cover_color: { type: string }
+        tags:
+          type: array
+          items: { type: string }
+        description: { type: string }
+    Room:
+      type: object
+      properties:
+        id: { type: string, example: R305 }
+        store_id: { type: string }
+        room_no: { type: string, example: '305' }
+        type_name: { type: string }
+        status: { type: string, enum: [vacant_ready, reserved, occupied, dirty, maintenance] }
+        status_label: { type: string }
+        room_type_id: { type: string }
+        price: { type: number }
+        floor: { type: integer }
+        guest_name: { type: string }
+        guest_phone: { type: string }
+        check_in_time: { type: string }
+        check_out_time: { type: string }
+        current_order_id: { type: string }
+        order_status: { type: string }
+        order_status_label: { type: string }
+        devices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Device'
+    Device:
+      type: object
+      properties:
+        id: { type: string, example: DEV-305-LIGHT }
+        room_id: { type: string }
+        room_no: { type: string }
+        sn: { type: string }
+        type: { type: string, enum: [light, air_conditioner, curtain, tv] }
+        type_label: { type: string }
+        name: { type: string }
+        online_status: { type: string, enum: [online, offline] }
+        online_label: { type: string }
+        properties:
+          type: object
+          additionalProperties: true
+        firmware: { type: string }
+        last_heartbeat: { type: string }
+    Order:
+      type: object
+      properties:
+        id: { type: string }
+        order_no: { type: string, example: ORD20261021001 }
+        user_id: { type: string }
+        room_id: { type: string }
+        room_type_id: { type: string }
+        room_no: { type: string }
+        type_name: { type: string }
+        price: { type: number }
+        nights: { type: integer }
+        amount: { type: number }
+        status:
+          type: string
+          enum: [pending_payment, paid, confirmed, awaiting_checkin, checked_in, completed, reviewed, cancelled, refunding, refunded]
+        status_label: { type: string }
+        can_control_devices: { type: boolean }
+        check_in_time: { type: string }
+        check_out_time: { type: string }
+        guest_name: { type: string }
+        guest_phone: { type: string }
+        created_at: { type: string }
+        paid_at: { type: string }
+        checked_in_at: { type: string }
+        checked_out_at: { type: string }
+        cancelled_at: { type: string }
+        refund_reason: { type: string }
+        remark: { type: string }
+        source: { type: string }
+        review_id: { type: string }
+        review:
+          $ref: '#/components/schemas/Review'
+    Review:
+      type: object
+      properties:
+        id: { type: string }
+        order_id: { type: string }
+        order_no: { type: string }
+        room_id: { type: string }
+        room_no: { type: string }
+        user_id: { type: string }
+        user_name: { type: string }
+        rating: { type: integer, minimum: 1, maximum: 5 }
+        content: { type: string }
+        created_at: { type: string }
+    Scene:
+      type: object
+      properties:
+        id: { type: string, example: SCENE_SLEEP }
+        code: { type: string, enum: [welcome, sleep, movie, leave] }
+        name: { type: string }
+        icon: { type: string }
+        description: { type: string }
+        actions:
+          type: array
+          items:
+            type: object
+            properties:
+              device_type: { type: string }
+              property: { type: string }
+              value: {}
+    Plan:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        scope: { type: string, enum: [room, floor, store] }
+        scope_label: { type: string }
+        scope_value: { type: integer }
+        tier: { type: string, enum: [basic, comfort, premium] }
+        tier_label: { type: string }
+        room_count: { type: integer }
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              device_type: { type: string }
+              name: { type: string }
+              qty: { type: integer }
+              unit_price: { type: number }
+              amount: { type: number }
+        total_price: { type: number }
+        status: { type: string, enum: [draft, pending_approval, approved, rejected] }
+        status_label: { type: string }
+        creator: { type: string }
+        approver: { type: string }
+        comment: { type: string }
+        created_at: { type: string }
+        approved_at: { type: string }
+    Invoice:
+      type: object
+      properties:
+        id: { type: string }
+        order_id: { type: string }
+        order_no: { type: string }
+        room_no: { type: string }
+        guest_name: { type: string }
+        amount: { type: number }
+        title: { type: string, enum: ['个人', '企业'] }
+        tax_no: { type: string }
+        status: { type: string, enum: [pending, issued] }
+        issued_at: { type: string }
+        created_at: { type: string }
+    Alarm:
+      type: object
+      properties:
+        id: { type: string }
+        type: { type: string, enum: [offline, sos, fault] }
+        type_label: { type: string }
+        level: { type: string, enum: [high, medium, low] }
+        device_id: { type: string }
+        device_name: { type: string }
+        room_id: { type: string }
+        room_no: { type: string }
+        status: { type: string, enum: [pending, handled] }
+        created_at: { type: string }
+        handled_at: { type: string }
+        handler: { type: string }
+        content: { type: string }
+    DashboardOverview:
+      type: object
+      properties:
+        date: { type: string }
+        room_total: { type: integer }
+        room_occupied: { type: integer }
+        room_reserved: { type: integer }
+        room_vacant: { type: integer }
+        room_dirty: { type: integer }
+        room_maintenance: { type: integer }
+        occupancy_rate: { type: number }
+        revenue_today: { type: number }
+        revenue_month: { type: number }
+        adr: { type: number }
+        guest_count: { type: integer }
+        today_check_in: { type: integer }
+        today_check_out: { type: integer }
+        pending_alarms: { type: integer }
+        pending_plans: { type: integer }
+        avg_rating: { type: number }
+        total_orders: { type: integer }
+
+paths:
+  /health:
+    get:
+      tags: [auth]
+      summary: 健康检查
+      responses:
+        '200': { description: OK }
+  /auth/login:
+    post:
+      tags: [auth]
+      summary: 顾客登录（任意手机号 + 验证码 1234）
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [phone, code]
+              properties:
+                phone: { type: string, example: '13800138000' }
+                code: { type: string, example: '1234' }
+      responses:
+        '200':
+          description: '{code,message,data:{token,user}}'
+  /auth/staff-login:
+    post:
+      tags: [auth]
+      summary: B 端员工登录（按角色免密）
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role: { type: string, enum: [store_manager, frontdesk, finance, engineer] }
+      responses:
+        '200': { description: '{token,user}' }
+  /auth/profile:
+    get:
+      tags: [auth]
+      summary: 当前用户
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: 'user' }
+  /auth/real-name:
+    post:
+      tags: [auth]
+      summary: 实名认证（Mock 2 秒）
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                real_name: { type: string }
+                id_card: { type: string }
+                image: { type: string }
+      responses:
+        '200': { description: 'user（status=normal）' }
+  /auth/logout:
+    post:
+      tags: [auth]
+      summary: 退出登录
+      responses:
+        '200': { description: 'data=null' }
+  /auth/demo-accounts:
+    get:
+      tags: [auth]
+      summary: 演示账号列表
+      responses:
+        '200': { description: '{customer, staff[]}' }
+  /auth/me:
+    get:
+      tags: [auth]
+      summary: 当前用户或 null
+      responses:
+        '200': { description: 'user | null' }
+
+  /stores:
+    get:
+      tags: [room]
+      summary: 门店列表
+      responses:
+        '200': { description: 'store[]' }
+  /room-types:
+    get:
+      tags: [room]
+      summary: 房型列表
+      parameters:
+        - { name: store_id, in: query, required: false, schema: { type: string } }
+      responses:
+        '200': { description: 'roomType[]' }
+  /rooms/availability:
+    get:
+      tags: [room]
+      summary: 按日期查可售房型（日期仅回显）
+      parameters:
+        - { name: check_in_time, in: query, required: false, schema: { type: string } }
+        - { name: check_out_time, in: query, required: false, schema: { type: string } }
+      responses:
+        '200': { description: '{check_in_time, check_out_time, list}' }
+  /rooms:
+    get:
+      tags: [room]
+      summary: 房态列表
+      parameters:
+        - { name: store_id, in: query, required: false, schema: { type: string } }
+        - { name: status, in: query, required: false, schema: { type: string } }
+        - { name: floor, in: query, required: false, schema: { type: integer } }
+        - { name: room_type_id, in: query, required: false, schema: { type: string } }
+        - { name: keyword, in: query, required: false, schema: { type: string } }
+      responses:
+        '200': { description: '{list, total, status_legend}' }
+  /rooms/{id}:
+    get:
+      tags: [room]
+      summary: 房间详情（含 devices）
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'room' }
+  /rooms/{id}/status:
+    patch:
+      tags: [room]
+      summary: 修改房态（前台 / 店长）
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status: { type: string, enum: [vacant_ready, reserved, occupied, dirty, maintenance] }
+      responses:
+        '200': { description: 'room（非法流转 code=2002）' }
+  /rooms/{id}/clean:
+    post:
+      tags: [room]
+      summary: 保洁完成（脏房 / 维修 → 可售）
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'room' }
+  /rooms/{id}/maintenance:
+    post:
+      tags: [room]
+      summary: 标记维修
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'room' }
+  /rooms/{id}/devices:
+    get:
+      tags: [room]
+      summary: 房间设备
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'device[]' }
+  /devices/refresh:
+    post:
+      tags: [device]
+      summary: 刷新全量设备心跳（演示）
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: '{refreshed}' }
+
+  /orders:
+    post:
+      tags: [order]
+      summary: 创建订单（→ 待支付，房间锁定为已预订）
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                room_type_id: { type: string }
+                room_id: { type: string }
+                check_in_time: { type: string, example: '2026-10-28' }
+                check_out_time: { type: string, example: '2026-10-30' }
+                guest_name: { type: string }
+                guest_phone: { type: string }
+                remark: { type: string }
+      responses:
+        '200': { description: 'order' }
+    get:
+      tags: [order]
+      summary: 订单列表
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: self, in: query, required: false, schema: { type: string, example: '1' } }
+        - { name: status, in: query, required: false, schema: { type: string } }
+        - { name: keyword, in: query, required: false, schema: { type: string } }
+        - { name: room_id, in: query, required: false, schema: { type: string } }
+        - { name: page, in: query, required: false, schema: { type: integer } }
+        - { name: page_size, in: query, required: false, schema: { type: integer } }
+      responses:
+        '200': { description: '{list, total, page, page_size}' }
+  /orders/{id}:
+    get:
+      tags: [order]
+      summary: 订单详情（支持 id 或订单号）
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'order' }
+  /orders/{id}/pay:
+    post:
+      tags: [order]
+      summary: 支付（待支付 → 已支付 → 已确认）
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'order' }
+  /orders/{id}/cancel:
+    post:
+      tags: [order]
+      summary: 取消订单
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'order' }
+  /orders/{id}/refund:
+    post:
+      tags: [order]
+      summary: 申请退款
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason: { type: string }
+      responses:
+        '200': { description: 'order' }
+  /orders/{id}/refund/confirm:
+    post:
+      tags: [order]
+      summary: 确认退款（B 端）
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'order' }
+  /orders/{id}/check-in:
+    post:
+      tags: [order]
+      summary: 办理入住（绑定 current_room_id）
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'order' }
+  /orders/{id}/check-out:
+    post:
+      tags: [order]
+      summary: 办理退房（房间转脏房）
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'order' }
+  /orders/{id}/review:
+    post:
+      tags: [order]
+      summary: 评价（已完成 → 已评价）
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating: { type: integer, minimum: 1, maximum: 5 }
+                content: { type: string }
+      responses:
+        '200': { description: 'order（含 review）' }
+  /orders/{id}/timeline:
+    get:
+      tags: [order]
+      summary: 订单状态时间轴
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'step[]' }
+
+  /devices:
+    get:
+      tags: [device]
+      summary: 设备查询（传 room_id 返回数组，否则返回分页对象）
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: room_id, in: query, required: false, schema: { type: string } }
+        - { name: type, in: query, required: false, schema: { type: string } }
+        - { name: online_status, in: query, required: false, schema: { type: string } }
+        - { name: keyword, in: query, required: false, schema: { type: string } }
+        - { name: page, in: query, required: false, schema: { type: integer } }
+        - { name: page_size, in: query, required: false, schema: { type: integer } }
+      responses:
+        '200': { description: 'device[] 或 {list,total,page,page_size}' }
+  /devices/{id}:
+    get:
+      tags: [device]
+      summary: 设备详情
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'device' }
+  /devices/{id}/properties:
+    patch:
+      tags: [device]
+      summary: 下发设备属性（离线 code=5003）
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              example: { power: true, brightness: 80 }
+      responses:
+        '200': { description: 'device（属性合并 + 心跳更新）' }
+  /devices/{id}/check:
+    post:
+      tags: [device]
+      summary: 设备自检
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: '{ok, device, duration}' }
+  /devices/{id}/rebind:
+    post:
+      tags: [device]
+      summary: 重新绑定（离线恢复上线）
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'device' }
+
+  /scenes:
+    get:
+      tags: [scene]
+      summary: 预置场景列表
+      responses:
+        '200': { description: 'scene[]' }
+  /scenes/{id}/execute:
+    post:
+      tags: [scene]
+      summary: 一键执行场景
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                room_id: { type: string }
+      responses:
+        '200': { description: '{scene, room_id, devices, executed_at}' }
+
+  /dashboard/overview:
+    get:
+      tags: [dashboard]
+      summary: 核心指标
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: 'overview' }
+  /dashboard/trend:
+    get:
+      tags: [dashboard]
+      summary: 营收 / 入住率 / ADR 趋势
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: days, in: query, required: false, schema: { type: integer, minimum: 7, maximum: 30 } }
+      responses:
+        '200': { description: '{days, list}' }
+  /dashboard/room-status-distribution:
+    get:
+      tags: [dashboard]
+      summary: 房态分布
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: '{list, total}' }
+  /energy/summary:
+    get:
+      tags: [dashboard]
+      summary: 能耗统计
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: days, in: query, required: false, schema: { type: integer, minimum: 7, maximum: 30 } }
+      responses:
+        '200': { description: '{days, series, totals}' }
+
+  /alarms:
+    get:
+      tags: [alarm]
+      summary: 告警列表
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: status, in: query, required: false, schema: { type: string } }
+        - { name: type, in: query, required: false, schema: { type: string } }
+        - { name: level, in: query, required: false, schema: { type: string } }
+      responses:
+        '200': { description: '{list, total, pending}' }
+  /alarms/{id}/handle:
+    post:
+      tags: [alarm]
+      summary: 处理告警
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'alarm（重复处理 code=7001）' }
+
+  /plans/catalog:
+    get:
+      tags: [plan]
+      summary: 物料库
+      responses:
+        '200': { description: '{scopes, tiers, items}' }
+  /plans:
+    get:
+      tags: [plan]
+      summary: 方案列表
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: '{list, total}' }
+  /plans/generate:
+    post:
+      tags: [plan]
+      summary: 方案生成（仅店长）
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                scope: { type: string, enum: [room, floor, store] }
+                tier: { type: string, enum: [basic, comfort, premium] }
+      responses:
+        '200': { description: 'plan（草稿）' }
+  /plans/{id}:
+    get:
+      tags: [plan]
+      summary: 方案详情
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'plan' }
+  /plans/{id}/submit:
+    post:
+      tags: [plan]
+      summary: 提交审批（草稿 → 待审批）
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'plan' }
+  /plans/{id}/approve:
+    post:
+      tags: [plan]
+      summary: 审批（仅店长；其他角色 403）
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                approved: { type: boolean, default: true }
+                comment: { type: string }
+      responses:
+        '200': { description: 'plan（已通过 / 已驳回）' }
+
+  /invoices:
+    get:
+      tags: [finance]
+      summary: 发票 / 对账列表
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: page, in: query, required: false, schema: { type: integer } }
+        - { name: page_size, in: query, required: false, schema: { type: integer } }
+        - { name: status, in: query, required: false, schema: { type: string } }
+        - { name: keyword, in: query, required: false, schema: { type: string } }
+      responses:
+        '200': { description: '{list, total, page, page_size}' }
+  /invoices/{id}/issue:
+    post:
+      tags: [finance]
+      summary: 开具发票（重复开票 code=9001）
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'invoice' }

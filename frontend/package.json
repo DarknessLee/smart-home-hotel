@@ -1,0 +1,17 @@
+{
+  "name": "smart-home-hotel-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "智慧住家 - 前端 Monorepo（C端 uni-app + B端 Vue3/Element Plus + 共享包）",
+  "scripts": {
+    "dev:customer": "pnpm --filter @smart-home/customer dev:h5",
+    "build:customer": "pnpm --filter @smart-home/customer build:h5",
+    "dev:admin": "pnpm --filter @smart-home/admin dev",
+    "build:admin": "pnpm --filter @smart-home/admin build",
+    "preview:admin": "pnpm --filter @smart-home/admin preview",
+    "check:mock": "pnpm --filter @smart-home/api test"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

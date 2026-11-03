@@ -1,0 +1,26 @@
+{
+  "name": "@smart-home/api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "智慧住家 - 统一 API 封装（axios 拦截器 + Mock 拦截开关）",
+  "type": "module",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./http": "./src/http.js",
+    "./api": "./src/api/index.js",
+    "./mock": "./src/mock/index.js"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "node scripts/smoke.mjs"
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "@smart-home/utils": "workspace:*",
+    "axios": "1.20.0"
+  }
+}

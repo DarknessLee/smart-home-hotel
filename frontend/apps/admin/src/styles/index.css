@@ -1,0 +1,581 @@
+/**
+ * 智慧住家 · B 端管理后台全局样式。
+ * 设计基调：品牌色 #1677FF，浅灰蓝背景，白色圆角卡片 + 柔和阴影，PC 优先。
+ */
+
+:root {
+  /* 品牌色（同时覆盖 Element Plus 主题变量） */
+  --el-color-primary: #1677ff;
+  --el-color-primary-light-3: #5a9bff;
+  --el-color-primary-light-5: #8cbbff;
+  --el-color-primary-light-7: #bdd8ff;
+  --el-color-primary-light-8: #d4e4ff;
+  --el-color-primary-light-9: #e8f1ff;
+  --el-color-primary-dark-2: #0f5ed6;
+  --el-border-radius-base: 8px;
+
+  --brand: #1677ff;
+  --brand-dark: #0f5ed6;
+  --brand-soft: #e8f1ff;
+  --page-bg: #f4f7fb;
+  --card-bg: #ffffff;
+  --text-main: #1f2d3d;
+  --text-regular: #44546a;
+  --text-secondary: #7c8aa3;
+  --text-placeholder: #a8b4c6;
+  --border-light: #eef2f8;
+  --border-base: #e5eaf3;
+  --success: #52c41a;
+  --warning: #faad14;
+  --danger: #f5222d;
+  --purple: #722ed1;
+  --cyan: #13c2c2;
+  --radius-card: 14px;
+  --radius-sm: 8px;
+  --shadow-card: 0 6px 20px rgba(31, 45, 61, 0.06);
+  --shadow-card-hover: 0 12px 30px rgba(22, 119, 255, 0.14);
+  --sidebar-width: 236px;
+  --sidebar-collapsed-width: 68px;
+  --header-height: 64px;
+  --font-number: 'DIN Alternate', 'HarmonyOS Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--page-bg);
+  color: var(--text-main);
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #d3dbe8;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #bcc8da;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ------------------------------------------------------------------ */
+/* 通用页面结构                                                        */
+/* ------------------------------------------------------------------ */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: page-in 0.32s ease;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.page-head__title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-head__title-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: linear-gradient(135deg, #1677ff, #4f9bff);
+  box-shadow: 0 6px 14px rgba(22, 119, 255, 0.3);
+  font-size: 18px;
+}
+
+.page-head__desc {
+  margin: 8px 0 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.page-head__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.panel {
+  background: var(--card-bg);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(229, 234, 243, 0.7);
+  padding: 18px 20px;
+}
+
+.panel--flush {
+  padding: 0;
+  overflow: hidden;
+}
+
+.panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.panel__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel__title::before {
+  content: '';
+  width: 4px;
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #1677ff, #6fb0ff);
+}
+
+.panel__extra {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.grid-cards {
+  display: grid;
+  gap: 16px;
+}
+
+/* KPI 卡片 */
+.kpi-card {
+  position: relative;
+  background: var(--card-bg);
+  border-radius: var(--radius-card);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(229, 234, 243, 0.7);
+  overflow: hidden;
+  transition: transform 0.24s ease, box-shadow 0.24s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  right: -28px;
+  top: -28px;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background: var(--kpi-soft, #e8f1ff);
+  opacity: 0.9;
+}
+
+.kpi-card__top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.kpi-card__label {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.kpi-card__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--kpi-color, #1677ff);
+  background: var(--kpi-soft, #e8f1ff);
+  font-size: 19px;
+}
+
+.kpi-card__value {
+  position: relative;
+  z-index: 1;
+  margin-top: 12px;
+  font-family: var(--font-number);
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: 0.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.kpi-card__value small {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-left: 4px;
+}
+
+.kpi-card__foot {
+  position: relative;
+  z-index: 1;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  min-height: 18px;
+}
+
+.kpi-card.is-danger .kpi-card__value {
+  color: var(--danger);
+}
+
+/* 图表容器 */
+.chart {
+  width: 100%;
+  height: 320px;
+}
+
+.chart--sm {
+  height: 260px;
+}
+
+.chart--lg {
+  height: 360px;
+}
+
+.chart--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-placeholder);
+  font-size: 13px;
+}
+
+/* 筛选栏 */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-bar .el-input,
+.filter-bar .el-select {
+  width: 190px;
+}
+
+.filter-bar__spacer {
+  flex: 1;
+}
+
+.filter-bar__summary {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.filter-bar__summary strong {
+  color: var(--brand);
+  font-weight: 700;
+  font-family: var(--font-number);
+  font-size: 16px;
+  margin: 0 3px;
+}
+
+/* 图例 */
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: var(--text-regular);
+}
+
+.legend__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 3px var(--legend-soft, rgba(22, 119, 255, 0.12));
+}
+
+.legend__count {
+  font-family: var(--font-number);
+  font-weight: 700;
+  color: var(--text-main);
+  font-size: 14px;
+}
+
+/* 空状态 / 加载 */
+.empty-block {
+  padding: 48px 16px;
+  text-align: center;
+  color: var(--text-placeholder);
+  font-size: 13px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.dot--online {
+  background: var(--success);
+  box-shadow: 0 0 0 3px rgba(82, 196, 26, 0.16);
+}
+
+.dot--offline {
+  background: #b6c0cf;
+  box-shadow: 0 0 0 3px rgba(140, 140, 140, 0.14);
+}
+
+/* 文本辅助 */
+.text-muted {
+  color: var(--text-secondary);
+}
+
+.text-small {
+  font-size: 12px;
+}
+
+.text-strong {
+  font-weight: 600;
+}
+
+.text-danger {
+  color: var(--danger);
+}
+
+.text-success {
+  color: var(--success);
+}
+
+.text-warning {
+  color: var(--warning);
+}
+
+.text-number {
+  font-family: var(--font-number);
+  font-variant-numeric: tabular-nums;
+}
+
+.mono {
+  font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+  font-size: 12.5px;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mt-8 {
+  margin-top: 8px;
+}
+
+.mt-12 {
+  margin-top: 12px;
+}
+
+.mt-16 {
+  margin-top: 16px;
+}
+
+/* Element Plus 微调 */
+.el-card {
+  border-radius: var(--radius-card);
+  border-color: var(--border-light);
+  box-shadow: var(--shadow-card);
+}
+
+.el-table {
+  --el-table-border-color: #f0f3f9;
+  --el-table-header-bg-color: #f8fafd;
+  --el-table-header-text-color: #6b7a90;
+  font-size: 13px;
+}
+
+.el-table th.el-table__cell {
+  font-weight: 600;
+  background: #f8fafd;
+}
+
+.el-table .el-table__row {
+  transition: background-color 0.18s ease;
+}
+
+.el-table .el-table__row:hover > td.el-table__cell {
+  background: #f5f9ff;
+}
+
+.el-dialog {
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+.el-drawer__header {
+  margin-bottom: 0;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.el-drawer__body {
+  padding: 20px;
+}
+
+.el-tag {
+  border-radius: 6px;
+}
+
+.el-descriptions__label {
+  color: var(--text-secondary) !important;
+  font-weight: 500 !important;
+}
+
+.el-message-box {
+  border-radius: 14px;
+}
+
+.el-pagination {
+  --el-pagination-button-bg-color: #f5f8fc;
+}
+
+/* 表格内操作按钮间距 */
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.table-actions .el-button + .el-button {
+  margin-left: 0;
+}
+
+/* 订单号 / 设备号等标识 */
+.code-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #f4f7fc;
+  color: #41506b;
+  font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+  font-size: 12px;
+  border: 1px solid #e8eef8;
+}
+
+.room-no-text {
+  font-family: var(--font-number);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* 拖拽 / 选中色 */
+::selection {
+  background: rgba(22, 119, 255, 0.18);
+}
+
+/* 响应式：中等屏幕收紧内边距 */
+@media (max-width: 1440px) {
+  .kpi-card__value {
+    font-size: 25px;
+  }
+}
+
+@media (max-width: 1280px) {
+  .chart {
+    height: 290px;
+  }
+}

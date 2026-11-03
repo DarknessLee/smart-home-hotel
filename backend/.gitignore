@@ -1,0 +1,40 @@
+# 编译产物
+/bin/
+/build/
+/dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# 本地环境变量（.env.example 是唯一需要提交的环境变量模板）
+.env
+.env.local
+.env.*.local
+*.local
+
+# 日志 / 覆盖率
+*.log
+logs/
+coverage.out
+coverage.html
+
+# Go 工作区文件
+go.work
+go.work.sum
+
+# IDE / 编辑器
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 依赖缓存（go mod tidy 会重新生成）
+vendor/
